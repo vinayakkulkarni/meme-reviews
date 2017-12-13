@@ -1,11 +1,10 @@
 import Vue from 'vue';
-import Hello from '@/components/Hello';
+import Index from '@/components/Index';
 
-describe('Hello.vue', () => {
+describe('Index.vue', () => {
   it('should render correct contents', () => {
-    const Constructor = Vue.extend(Hello);
+    const Constructor = Vue.extend(Index);
     const vm = new Constructor().$mount();
-    expect(vm.$el.querySelector('.hello h1').textContent)
-      .to.equal('Welcome to Your Vue.js PWA');
+    expect(vm.$el.querySelector('.hello h1').textContent).to.equal('Welcome to Meme 👏 Reviews 👏');
   });
 });
