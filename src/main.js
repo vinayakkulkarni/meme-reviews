@@ -5,6 +5,8 @@ import VueFire from 'vuefire';
 import App from './App';
 import router from './router';
 
+require('../node_modules/font-awesome/css/font-awesome.css');
+
 Vue.use(VueFire);
 
 Vue.config.productionTip = false;
