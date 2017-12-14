@@ -1,11 +1,10 @@
 <template>
   <div id="app" class="Site">
-    <section class="hero is-medium is-warning is-bold Site-content">
+    <section class="hero is-fullheight is-light is-bold Site-content">
       <div class="hero-body">
         <div class="container is-fluid">
-          <div class="content has-text-centered">
+          <div class="content">
             <main>
-              <img src="./assets/logo.png" alt="MEME 👏 REVIEWS">
               <router-view></router-view>
             </main>
           </div>
