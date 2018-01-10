@@ -1,4 +1,4 @@
-# [Meme 👏 Reviews](https://meme-reviews.xyz) 🙌 [![Build Status](https://travis-ci.org/vinayakkulkarni/meme-reviews.svg?branch=master)](https://travis-ci.org/vinayakkulkarni/meme-reviews)
+# [Meme 👏 Reviews](https://meme-reviews.xyz) 🙌 [![Build Status](https://travis-ci.org/vinayakkulkarni/meme-reviews.svg?branch=master)](https://travis-ci.org/vinayakkulkarni/meme-reviews) [![dependencies Status](https://david-dm.org/vinayakkulkarni/meme-reviews/status.svg)](https://david-dm.org/vinayakkulkarni/meme-reviews) [![devDependencies Status](https://david-dm.org/vinayakkulkarni/meme-reviews/dev-status.svg)](https://david-dm.org/vinayakkulkarni/meme-reviews?type=dev)
 
 > Meme 👏 Reviews 👏 Meme 👏 Reviews 👏
 
