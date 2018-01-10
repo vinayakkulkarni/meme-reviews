@@ -1,14 +1,13 @@
 <template>
   <div class="container has-text-centered">
     <div class="column is-4 is-offset-4">
-      <h3 class="title has-text-grey">Signup</h3>
-      <p class="subtitle has-text-grey">Please signup to proceed.</p>
+      <h3 class="title has-text-grey">Signup / Login</h3>
+      <p class="subtitle has-text-grey">You can use SSO or use email, password to login.</p>
       <div class="box">
         <figure class="avatar">
           <img src="../../assets/images/logo.svg" style="width: 9em" alt="MEME 👏 REVIEWS">
         </figure>
         <div class="field">
-          <label class="label">Email</label>
           <div class="control has-icons-right">
             <input class="input is-large" type="email" placeholder="Your Email" v-model="email" :class="{'is-danger': errors.message}">
             <span class="icon is-small is-right" v-if="errors.message">
@@ -83,7 +82,7 @@ export default {
       if (user) {
         t.$router.push({ name: 'Index', params: { signedIn: true } });
       } else {
-        console.log('not logged in');
+        t.loggedOut = true;
       }
     });
   },
@@ -95,6 +94,7 @@ export default {
       token: null,
       user: {},
       errors: {},
+      loggedOut: false,
     };
   },
   methods: {
