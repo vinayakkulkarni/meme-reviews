@@ -6,7 +6,7 @@
         <div class="container is-fluid">
           <div class="content">
             <main>
-              <router-view></router-view>
+              <router-view :signedIn="signedIn" :user="user"></router-view>
             </main>
           </div>
         </div>
@@ -17,12 +17,50 @@
 </template>
 
 <script>
+import firebase from 'firebase';
+import db from './firebase';
+import TopNavbar from './components/_partials/TopNavbar';
 import BottomFooter from './components/_partials/BottomFooter';
+
 export default {
   name: 'app',
   components: {
     TopNavbar,
     BottomFooter,
+  },
+  firebase: {
+    memes: db.ref('memes'),
+  },
+  data() {
+    return {
+      user: {},
+      signedIn: false,
+    };
+  },
+  mounted() {
+    const t = this;
+    firebase.auth().onAuthStateChanged((user) => {
+      if (user) {
+        t.user = user;
+        t.signedIn = true;
+      } else {
+        t.signedIn = false;
+      }
+    });
+  },
+  methods: {
+    signOut() {
+      const t = this;
+      firebase
+        .auth()
+        .signOut()
+        .then(() => {
+          t.signedIn = false;
+        })
+        .catch((error) => {
+          t.errors = error;
+        });
+    },
   },
 };
 </script>
