@@ -11,21 +11,17 @@
         </div>
       </div>
     </section>
-    <footer class="footer" style="padding: 3rem 1.5rem;">
-      <div class="container">
-        <div class="content has-text-centered">
-          <p>
-            <strong>MEME 👏 REVIEWS 👏</strong> Made with ❤️
-          </p>
-        </div>
-      </div>
-    </footer>
+    <bottom-footer></bottom-footer>
   </div>
 </template>
 
 <script>
+import BottomFooter from './components/_partials/BottomFooter';
 export default {
   name: 'app',
+  components: {
+    BottomFooter,
+  },
 };
 </script>
 <style lang="sass" src="bulma"></style>
