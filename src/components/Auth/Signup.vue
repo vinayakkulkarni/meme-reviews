@@ -1,34 +1,40 @@
 <template>
-  <div class="container has-text-centered">
-    <div class="column is-4 is-offset-4">
-      <h3 class="title has-text-grey">Signup / Login</h3>
-      <p class="subtitle has-text-grey">You can use SSO or use email, password to login.</p>
-      <div class="box">
-        <figure class="avatar">
-          <img src="../../assets/images/logo.svg" style="width: 9em" alt="MEME 👏 REVIEWS">
-        </figure>
-        <div class="field">
-          <div class="control has-icons-right">
-            <input class="input is-large" type="email" placeholder="Your Email" v-model="email" :class="{'is-danger': errors.message}">
-            <span class="icon is-small is-right" v-if="errors.message">
-              <i class="fa fa-warning"></i>
-            </span>
-          </div>
-          <p class="help is-danger is-left">{{ errors.message }}</p>
-        </div>
-
-        <div class="field">
-          <div class="control">
-            <input class="input is-large" type="password" placeholder="Your Password" v-model="password">
-          </div>
-        </div>
-        <div class="field">
-          <div class="control">
-            <a class="button is-block is-info is-large" @click="emailSignup">Signup</a>
-          </div>
-        </div>
-        <div class="field">
-          <div class="buttons has-addons is-centered">
+  <div class="page">
+    <div class="container">
+      <div class="left">
+        <div class="login">Login</div>
+        <div class="eula">By logging in you agree to the ridiculously long terms that you didn't bother to read</div>
+      </div>
+      <div class="right">
+        <svg viewBox="0 0 320 300">
+          <defs>
+            <linearGradient
+                            inkscape:collect="always"
+                            id="linearGradient"
+                            x1="13"
+                            y1="193.49992"
+                            x2="307"
+                            y2="193.49992"
+                            gradientUnits="userSpaceOnUse">
+              <stop
+                    style="stop-color:#ff00ff;"
+                    offset="0"
+                    id="stop876" />
+              <stop
+                    style="stop-color:#ff0000;"
+                    offset="1"
+                    id="stop878" />
+            </linearGradient>
+          </defs>
+          <path d="m 40,120.00016 239.99984,-3.2e-4 c 0,0 24.99263,0.79932 25.00016,35.00016 0.008,34.20084 -25.00016,35 -25.00016,35 h -239.99984 c 0,-0.0205 -25,4.01348 -25,38.5 0,34.48652 25,38.5 25,38.5 h 215 c 0,0 20,-0.99604 20,-25 0,-24.00396 -20,-25 -20,-25 h -190 c 0,0 -20,1.71033 -20,25 0,24.00396 20,25 20,25 h 168.57143" />
+        </svg>
+        <div class="form">
+          <label for="email">Email</label>
+          <input type="email" id="email" autofocus="autofocus" v-model="email">
+          <label for="password">Password</label>
+          <input type="password" id="password" v-model="password">
+          <input type="submit" id="submit" value="Submit" @click="emailSignup">
+          <div style="padding-top: 34px; text-align: center;">
             <button class="button is-large" @click="oAuthLogin('github')">
               <span class="icon">
                 <i class="fa fa-github"></i>
@@ -41,12 +47,6 @@
               </span>
               <!-- <span>Google Plus</span> -->
             </button>
-            <button class="button is-large" @click="oAuthLogin('facebook')">
-              <span class="icon">
-                <i class="fa fa-facebook"></i>
-              </span>
-              <!-- <span>Facebook</span> -->
-            </button>
             <button class="button is-large" @click="oAuthLogin('twitter')">
               <span class="icon">
                 <i class="fa fa-twitter"></i>
@@ -56,36 +56,21 @@
           </div>
         </div>
       </div>
-      <!-- <p class="has-text-grey">
-        <a href="../">Sign Up</a> &nbsp;·&nbsp;
-        <a href="../">Forgot Password</a> &nbsp;·&nbsp;
-        <a href="../">Need Help?</a>
-      </p> -->
     </div>
   </div>
 </template>
 <script>
 import * as firebase from 'firebase';
+import anime from 'animejs';
 
 const githubAuthProvider = new firebase.auth.GithubAuthProvider();
 const googleAuthProvider = new firebase.auth.GoogleAuthProvider();
 const twitterAuthProvider = new firebase.auth.TwitterAuthProvider();
-const facebookAuthProvider = new firebase.auth.FacebookAuthProvider();
 
 githubAuthProvider.setCustomParameters({ allow_signup: 'false' });
 
 export default {
   name: 'Signup',
-  mounted() {
-    const t = this;
-    firebase.auth().onAuthStateChanged((user) => {
-      if (user) {
-        t.$router.push({ name: 'Index', params: { signedIn: true } });
-      } else {
-        t.loggedOut = true;
-      }
-    });
-  },
   data() {
     return {
       email: null,
@@ -96,6 +81,65 @@ export default {
       errors: {},
       loggedOut: false,
     };
+  },
+  mounted() {
+    const t = this;
+    firebase.auth().onAuthStateChanged((user) => {
+      if (user) {
+        t.$router.push({ name: 'Index', params: { signedIn: true } });
+      } else {
+        t.loggedOut = true;
+      }
+    });
+    let current = null;
+    document.querySelector('#email').addEventListener('focus', () => {
+      if (current) current.pause();
+      current = anime({
+        targets: 'path',
+        strokeDashoffset: {
+          value: 0,
+          duration: 700,
+          easing: 'easeOutQuart',
+        },
+        strokeDasharray: {
+          value: '240 1386',
+          duration: 700,
+          easing: 'easeOutQuart',
+        },
+      });
+    });
+    document.querySelector('#password').addEventListener('focus', () => {
+      if (current) current.pause();
+      current = anime({
+        targets: 'path',
+        strokeDashoffset: {
+          value: -336,
+          duration: 700,
+          easing: 'easeOutQuart',
+        },
+        strokeDasharray: {
+          value: '240 1386',
+          duration: 700,
+          easing: 'easeOutQuart',
+        },
+      });
+    });
+    document.querySelector('#submit').addEventListener('focus', () => {
+      if (current) current.pause();
+      current = anime({
+        targets: 'path',
+        strokeDashoffset: {
+          value: -730,
+          duration: 700,
+          easing: 'easeOutQuart',
+        },
+        strokeDasharray: {
+          value: '530 1386',
+          duration: 700,
+          easing: 'easeOutQuart',
+        },
+      });
+    });
   },
   methods: {
     emailSignup() {
@@ -118,10 +162,6 @@ export default {
         t.oAuthProvider = githubAuthProvider;
       }
 
-      if (provider === 'facebook') {
-        t.oAuthProvider = facebookAuthProvider;
-      }
-
       if (provider === 'google') {
         t.oAuthProvider = googleAuthProvider;
       }
@@ -141,3 +181,129 @@ export default {
   },
 };
 </script>
+<style scoped>
+@import url('https://rsms.me/inter/inter-ui.css');
+::selection {
+  background: #2d2f36;
+}
+::-webkit-selection {
+  background: #2d2f36;
+}
+::-moz-selection {
+  background: #2d2f36;
+}
+.page {
+  font-family: 'Inter UI', sans-serif;
+  background: #e2e2e5;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  position: absolute;
+  place-content: center;
+  width: 100%;
+}
+@media (max-width: 767px) {
+  .page {
+    height: 100vh;
+  }
+}
+.container {
+  display: flex;
+  height: 320px;
+  margin: 0 auto;
+  width: 640px;
+}
+@media (max-width: 767px) {
+  .container {
+    flex-direction: column;
+    height: 630px;
+    width: 320px;
+  }
+}
+.left {
+  background: white;
+  height: calc(100% - 40px);
+  top: 20px;
+  position: relative;
+  width: 50%;
+}
+@media (max-width: 767px) {
+  .left {
+    height: 100%;
+    left: 20px;
+    width: calc(100% - 40px);
+    max-height: 270px;
+  }
+}
+.login {
+  font-size: 50px;
+  font-weight: 900;
+  margin: 50px 40px 40px;
+}
+.eula {
+  color: #999;
+  font-size: 14px;
+  line-height: 1.5;
+  margin: 40px;
+}
+.right {
+  background: #474a59;
+  box-shadow: 0px 0px 40px 16px rgba(0, 0, 0, 0.22);
+  color: #f1f1f2;
+  position: relative;
+  width: 50%;
+}
+@media (max-width: 767px) {
+  .right {
+    flex-shrink: 0;
+    height: 100%;
+    width: 100%;
+    max-height: 350px;
+  }
+}
+svg {
+  position: absolute;
+  width: 320px;
+}
+path {
+  fill: none;
+  stroke: url(#linearGradient);
+  stroke-width: 4;
+  stroke-dasharray: 240 1386;
+}
+.form {
+  margin: 40px;
+  position: absolute;
+}
+label {
+  color: #c2c2c5;
+  display: block;
+  font-size: 14px;
+  margin-top: 20px;
+  margin-bottom: 5px;
+}
+input {
+  background: transparent;
+  border: 0;
+  color: #f2f2f2;
+  font-size: 20px;
+  height: 30px;
+  line-height: 30px;
+  outline: none !important;
+  width: 100%;
+}
+input::-moz-focus-inner {
+  border: 0;
+}
+#submit {
+  color: #707075;
+  margin-top: 1.65em;
+  transition: color 300ms;
+}
+#submit:focus {
+  color: #f2f2f2;
+}
+#submit:active {
+  color: #d0d0d2;
+}
+</style>
