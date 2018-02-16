@@ -4,4 +4,5 @@ node_js:
 install:
     - npm install
 script:
+    - cp src/firebase.example.js src/firebase.js
     - npm test
