@@ -33,7 +33,7 @@
           <input type="email" id="email" autofocus="autofocus" v-model="email">
           <label for="password">Password</label>
           <input type="password" id="password" v-model="password">
-          <input type="submit" id="submit" value="Submit" @click="emailSignup">
+          <input type="submit" id="submit" value="Submit" style="cursor: pointer;" @click="emailSignup">
           <div style="padding-top: 34px; text-align: center;">
             <button class="button is-large" @click="oAuthLogin('github')">
               <span class="icon">
@@ -77,6 +77,7 @@ export default {
       password: null,
       oAuthProvider: null,
       token: null,
+      auth: firebase.auth(),
       user: {},
       errors: {},
       loggedOut: false,
@@ -144,11 +145,36 @@ export default {
   methods: {
     emailSignup() {
       const t = this;
-      firebase
-        .auth()
+      t.auth
         .createUserWithEmailAndPassword(t.email, t.password)
         .catch((error) => {
           t.errors = error;
+          if (t.errors.code === 'auth/email-already-in-use') {
+            t.signInEmail();
+          }
+          if (t.errors.code === 'auth/wrong-password') {
+            t.resetPassword();
+          }
+        });
+    },
+    signInEmail() {
+      const t = this;
+      t.auth.signInWithEmailAndPassword(t.email, t.password).catch((error) => {
+        t.errors = error;
+      });
+    },
+    resetPassword() {
+      const t = this;
+      t.auth
+        .sendPasswordResetEmail(t.email)
+        .then(() => {
+          console.log('sent reset password email');
+          alert('Email Sent!');
+          // Email sent.
+        })
+        .catch((error) => {
+          t.errors = error;
+          // An error happened.
         });
     },
     oAuthLogin(provider) {
