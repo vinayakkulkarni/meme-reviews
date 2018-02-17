@@ -22,6 +22,7 @@
     "vue": "^2.5.13",
     "vue-localstorage": "^0.5.0",
     "vue-router": "^3.0.1",
+    "vue-sweetalert2": "^1.2.4",
     "vuefire": "^1.4.5"
   },
   "devDependencies": {
