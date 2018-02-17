@@ -28,12 +28,12 @@
           </defs>
           <path d="m 40,120.00016 239.99984,-3.2e-4 c 0,0 24.99263,0.79932 25.00016,35.00016 0.008,34.20084 -25.00016,35 -25.00016,35 h -239.99984 c 0,-0.0205 -25,4.01348 -25,38.5 0,34.48652 25,38.5 25,38.5 h 215 c 0,0 20,-0.99604 20,-25 0,-24.00396 -20,-25 -20,-25 h -190 c 0,0 -20,1.71033 -20,25 0,24.00396 20,25 20,25 h 168.57143" />
         </svg>
-        <div class="form">
+        <form class="form" method="POST" @submit.prevent="emailSignup">
           <label for="email">Email</label>
           <input type="email" id="email" autofocus="autofocus" v-model="email">
           <label for="password">Password</label>
           <input type="password" id="password" v-model="password">
-          <input type="submit" id="submit" value="Submit" style="cursor: pointer;" @click="emailSignup">
+          <input type="submit" id="submit" value="Submit" style="cursor: pointer;">
           <div style="padding-top: 34px; text-align: center;">
             <button class="button is-large" @click="oAuthLogin('github')">
               <span class="icon">
@@ -54,7 +54,7 @@
               <!-- <span>Twitter</span> -->
             </button>
           </div>
-        </div>
+        </form>
       </div>
     </div>
   </div>
@@ -87,7 +87,7 @@ export default {
     const t = this;
     firebase.auth().onAuthStateChanged((user) => {
       if (user) {
-        t.$router.push({ name: 'Index', params: { signedIn: true } });
+        // t.showAlert();
       } else {
         t.loggedOut = true;
       }
@@ -147,34 +147,110 @@ export default {
       const t = this;
       t.auth
         .createUserWithEmailAndPassword(t.email, t.password)
+        .then(() => {
+          // if new user is created!
+          t
+            .$swal({
+              title: 'Yay!',
+              text: 'A new hope arises!',
+              type: 'success',
+              showCancelButton: false,
+              confirmButtonColor: '#3085d6',
+              confirmButtonText: '🤙',
+            })
+            .then((result) => {
+              if (result.value) {
+                t.$router.push({ name: 'Index', params: { signedIn: true } });
+              }
+            });
+        })
         .catch((error) => {
           t.errors = error;
           if (t.errors.code === 'auth/email-already-in-use') {
             t.signInEmail();
           }
-          if (t.errors.code === 'auth/wrong-password') {
-            t.resetPassword();
-          }
         });
     },
     signInEmail() {
       const t = this;
-      t.auth.signInWithEmailAndPassword(t.email, t.password).catch((error) => {
-        t.errors = error;
-      });
+      t.auth
+        .signInWithEmailAndPassword(t.email, t.password)
+        .then(() => {
+          // Sucessful login
+          t
+            .$swal({
+              title: 'Yay!',
+              text: 'Welcome back',
+              type: 'success',
+              showCancelButton: false,
+              confirmButtonColor: '#3085d6',
+              confirmButtonText: '🤙',
+            })
+            .then((result) => {
+              if (result.value) {
+                t.$router.push({ name: 'Index', params: { signedIn: true } });
+              }
+            });
+        })
+        .catch((error) => {
+          t.errors = error;
+          // Unsucessful login
+          t
+            .$swal({
+              title: 'Eeks!',
+              text: error.message,
+              type: 'error',
+              showCancelButton: false,
+              confirmButtonColor: '#3085d6',
+              confirmButtonText: 'OK ☹️',
+            })
+            .then((result) => {
+              if (result.value) {
+                t.password = null;
+              }
+            });
+          if (error.code === 'auth/wrong-password') {
+            t
+              .$swal({
+                title: 'Eeks!',
+                text: error.message,
+                type: 'error',
+                showCancelButton: false,
+                confirmButtonColor: '#3085d6',
+                confirmButtonText: 'Would you like to reset your password?',
+              })
+              .then((result) => {
+                if (result.value) {
+                  t.password = null;
+                  t.resetPassword();
+                }
+              });
+          }
+        });
     },
     resetPassword() {
       const t = this;
       t.auth
         .sendPasswordResetEmail(t.email)
         .then(() => {
-          console.log('sent reset password email');
-          alert('Email Sent!');
-          // Email sent.
+          // Email sent. Add Alert here!
+          t
+            .$swal({
+              title: 'Hell yeah!',
+              text: 'Please check your ✉️ with the instructions!',
+              type: 'success',
+              showCancelButton: false,
+              confirmButtonColor: '#3085d6',
+              confirmButtonText: '🤟',
+            })
+            .then((result) => {
+              if (result.value) {
+                // t.$router.push({ name: 'Index', params: { signedIn: true } });
+              }
+            });
         })
         .catch((error) => {
           t.errors = error;
-          // An error happened.
         });
     },
     oAuthLogin(provider) {
@@ -198,11 +274,55 @@ export default {
         .then((result) => {
           t.token = result.credential.accessToken;
           t.user = result.user;
-          t.$router.push({ name: 'Index', params: { signedIn: true } });
+          t
+            .$swal({
+              title: "'twas sucessful!",
+              type: 'success',
+              showCancelButton: false,
+              confirmButtonColor: '#3085d6',
+              confirmButtonText: '🤙',
+            })
+            .then((data) => {
+              if (data.value) {
+                t.$router.push({ name: 'Index', params: { signedIn: true } });
+              }
+            });
         })
         .catch((error) => {
           t.errors = error;
+          t
+            .$swal({
+              title: 'Eeks!',
+              text: error.message,
+              type: 'error',
+              showCancelButton: false,
+              confirmButtonColor: '#3085d6',
+              confirmButtonText: 'OK ☹️',
+            })
+            .then((result) => {
+              if (result.value) {
+                t.password = null;
+              }
+            });
         });
+    },
+    showAlert() {
+      const t = this;
+      t
+        .$swal({
+          title: 'Yay!',
+          text: "You've sucessfully logged in!",
+          type: 'success',
+          showCancelButton: false,
+          confirmButtonColor: '#3085d6',
+          confirmButtonText: "OK, what's next?",
+        })
+        .then((result) => {
+          if (result.value) {
+            t.$router.push({ name: 'Index', params: { signedIn: true } });
+          }
+        });
+      // t.$swal('Sucessfully Logged In!!');
     },
   },
 };
