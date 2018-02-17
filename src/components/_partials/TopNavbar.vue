@@ -27,7 +27,7 @@
             </a>
             <div class="navbar-dropdown is-boxed">
               <a class="navbar-item" href="/">
-              <img :src="user.photoURL" alt="Profile" v-if="user.photoURL"> &nbsp; {{ user.displayName }}
+              <img :src="user.providerData[0].photoURL" :alt="user.displayName" v-if="user.providerData[0].photoURL"> &nbsp; {{ user.displayName }}
               </a>
             </div>
           </div>
