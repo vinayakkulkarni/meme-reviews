@@ -145,6 +145,10 @@ export default {
   methods: {
     emailSignup() {
       const t = this;
+      if (t.email === null || t.password === null) {
+        t.$toasted.error('Please check email / password');
+        return;
+      }
       t.auth
         .createUserWithEmailAndPassword(t.email, t.password)
         .then(() => {

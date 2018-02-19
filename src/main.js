@@ -3,8 +3,11 @@
 import Vue from 'vue';
 import VueFire from 'vuefire';
 import VueSweetalert2 from 'vue-sweetalert2';
+import Toasted from 'vue-toasted';
 import App from './App';
 import router from './router';
+
+Vue.use(Toasted, { position: 'bottom-right', duration: 3000 });
 
 require('../node_modules/font-awesome/css/font-awesome.css');
 
